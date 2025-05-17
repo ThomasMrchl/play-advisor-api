@@ -1,11 +1,9 @@
+const pool = require('../database/mysql.db');
 
 exports.getUsers = async (req, res) => {
-
-    if (!req.user) return res.status(401).json({'message': 'Authentification issue'});
-  
     try{
   
-      const [result] = await pool.query('SELECT username, email, country, admin FROM users DESC LIMIT 50');
+      const [result] = await pool.query('SELECT username, email, country, admin FROM users');
   
       return res.status(200).json({ result });
   

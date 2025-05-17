@@ -1,41 +1,33 @@
 const express = require('express');
-// const cors = require('cors');
-// const corsOptions = require('./config/corsOptions');
-// const cookieParser = require('cookie-parser');
-// const path = require('path');
+const path = require('path');
+const cors = require('cors');
+const corsOptions = require('./config/corsOptions');
+require('./database/mysql.db')
 
-// const postRoutes = require('./routes/post');
-// const likeRoutes = require('./routes/like');
-// const userRoutes = require('./routes/user');
-// const followRoutes = require('./routes/follow');
-// const clubRoutes = require('./routes/club');
-// const memberRoutes = require('./routes/member');
-
-// const credentials = require('./middleware/credentials');
-// const verifyJWT = require('./middleware/verifyJWT');
-
-// require('./databases/mysql.db');
+const gameRoutes = require('./routes/game')
+const reviewRoutes = require('./routes/review')
+const userRoutes = require('./routes/user')
 
 const app = express();
 
-// app.use(credentials);
-// app.use(cors(corsOptions));
-// app.use(express.urlencoded({ extended: true }));
+app.use(cors(corsOptions));
 app.use(express.json());
-// app.use(cookieParser());
 
-// app.use('/api/auth', authRoutes);
-// app.use('/avatars', express.static(path.join(__dirname, './public/avatars')));
-// app.use('/images', express.static(path.join(__dirname, './public/images')));
-// app.use('/banners', express.static(path.join(__dirname, './public/banners')))
+// Setup routes before starting the server
+app.use('/game', gameRoutes);
+app.use('/review', reviewRoutes);
+app.use('/user', userRoutes);
 
-// app.use(verifyJWT);
-// app.use('/api/user', userRoutes);
-// app.use('/api/post', postRoutes);
-// app.use('/api/like', likeRoutes);
-// app.use('/api/follow', followRoutes);
-// app.use('/api/club', clubRoutes);
-// app.use('/api/member', memberRoutes);
+app.all('/{*any}', (req, res) => {
+    res.status(404);
+    if (req.accepts('html')) {
+        res.sendFile(path.join(__dirname, 'views', '404.html'));
+    } else if (req.accepts('json')) {
+        res.json({ "error": "404 Not Found" });
+    } else {
+        res.type('txt').send("404 Not Found");
+    }
+});
 
 const PORT = process.env.PORT || 3000;
 

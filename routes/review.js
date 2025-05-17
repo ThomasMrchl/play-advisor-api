@@ -5,3 +5,5 @@ const reviewCrtl = require('../controllers/review');
 
 router.get('/getReviews', reviewCrtl.getReviews);
 router.post('/addReview', reviewCrtl.addReview);
+
+module.exports = router;

@@ -1,3 +1,5 @@
+const pool = require('../database/mysql.db');
+
 exports.addReview = async (req, res) => {
 
     const { game_id, comment, stars, username } = req.body;
