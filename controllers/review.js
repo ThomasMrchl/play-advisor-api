@@ -1,7 +1,6 @@
 const pool = require('../database/mysql.db');
 
 exports.addReview = async (req, res) => {
-
     const { game_id, comment, stars, username } = req.body;
 
     try {
@@ -9,7 +8,7 @@ exports.addReview = async (req, res) => {
         const [user] = await pool.query('SELECT user_id FROM users WHERE username = ?', [username]);
         if (!user[0]) return res.status(404).json({ 'message': 'User not found' });
 
-        if (!game_id || !comment || !stars, !username) return res.status(400).json({ 'message': 'Missing fields' });
+        if (!game_id || !comment || !stars || !username) return res.status(400).json({ 'message': 'Missing fields' });
 
         try {
             const [result] = await pool.query('INSERT INTO reviews (comment, stars, game_id, user_id) VALUES (?, ?, ?, ?)', [comment, stars, game_id, user[0].user_id]);
