@@ -76,3 +76,13 @@ exports.addGame = async (req, res) => {
         return res.status(500).json({ 'message': 'Internal server error' });
     }
 }
+
+exports.getTopRatedGames = async (req, res) => {
+    try {
+        const [result] = await pool.query('SELECT * FROM view_top_rated_games');
+        return res.status(200).json({ result });
+    } catch (err) {
+        console.error('Error fetching top rated games:', err);
+        return res.status(500).json({ 'message': 'Internal server error' });
+    }
+}

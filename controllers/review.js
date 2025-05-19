@@ -116,3 +116,24 @@ exports.deleteReview = async (req, res) => {
         return res.status(500).json({ 'message': 'Internal server error' });
     }
 }
+
+exports.getUserReviewHistory = async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        const [result] = await pool.query(
+            'SELECT * FROM view_user_review_history WHERE username = ?',
+            [username]
+        );
+        
+        if (result.length === 0) {
+            return res.status(200).json({ result: [] });
+        }
+
+        return res.status(200).json({ result });
+
+    } catch (err) {
+        console.error('Error fetching user review history:', err);
+        return res.status(500).json({ 'message': 'Internal server error' });
+    }
+}
